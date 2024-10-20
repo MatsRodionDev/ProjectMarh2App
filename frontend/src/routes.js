@@ -1,5 +1,6 @@
 import Auth from "./pages/authPage/auth"
-import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "./utils/consts"
+import Projects from "./pages/projectsPage/Projects"
+import { LOGIN_ROUTE, PROJECTS_ROUTE, REGISTRATION_ROUTE } from "./utils/consts"
 
 export const publishRoutes = [
     {
@@ -9,6 +10,10 @@ export const publishRoutes = [
     {
         path: REGISTRATION_ROUTE,
         Component: Auth
+    },
+    {
+        path: PROJECTS_ROUTE,
+        Component: Projects
     },
 ]
 export const workerRoutes = [
