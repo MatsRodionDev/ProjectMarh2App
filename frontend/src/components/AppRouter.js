@@ -7,6 +7,9 @@ const AppRouter = () => {
     
     return (
         <Routes>
+            {publishRoutes.map(({path, Component}) => 
+                <Route key={path} path={path} Component={Component} exact/>
+            )}
         </Routes>
     )
 }
