@@ -2,6 +2,7 @@ import React from "react";
 import { Container} from 'react-bootstrap';
 import SortingMenu from "./components/SortingMenu";
 import ProjectsList from "./components/ProjectsList";
+import AdminUserPage from "../adminUsersPage/AdminUserPage";
 
 const Projects = () => {
     return (
@@ -13,6 +14,7 @@ const Projects = () => {
                 <SortingMenu/>
                 <ProjectsList/>
             </Container>
+            <AdminUserPage/>
         </div>
     )
 }
