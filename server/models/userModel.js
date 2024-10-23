@@ -1,14 +1,38 @@
+// models/userModel.js
 import sequelize from "../db.js";
 import { DataTypes } from "sequelize";
+import Role from "./roleModel.js";
 
-const User = sequelize.define('user', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    firstName: {type: DataTypes.STRING},
-    LastName: {type: DataTypes.STRING},
-    email: {type: DataTypes.STRING, unique: true},
-    password: {type: DataTypes.STRING}  
-})
+const User = sequelize.define('User', { 
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    firstName: {
+        type: DataTypes.STRING,
+        allowNull: false 
+    },
+    lastName: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false 
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false 
+    },
+    roleId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Role, 
+            key: 'id'
+        }
+    }
+});
 
-
-
-export default User
+export default User;
