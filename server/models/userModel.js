@@ -31,7 +31,8 @@ const User = sequelize.define('User', {
         references: {
             model: Role, 
             key: 'id'
-        }
+        },
+        allowNull: false 
     }
 });
 

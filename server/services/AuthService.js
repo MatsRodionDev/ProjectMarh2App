@@ -7,9 +7,6 @@ class AuthService {
     async login(email, password) {
         const user = await UserService.getByEmailAsync(email)
 
-        console.log(user + '+++++++')
-        console.log(!user + '-------')
-
         if(!user) {
             throw ApiError.badRequest('Incorrect email or password')
         }
@@ -32,8 +29,6 @@ class AuthService {
             throw ApiError.badRequest('User with with such email already exists')
         }
 
-        console.log('--------------------------')
-
         const passHash = await bcrypt.hash(dto.password, 10)
         dto.password = passHash
 
@@ -41,6 +36,7 @@ class AuthService {
 
         return this.createToken(dto.is, dto.email)
     }
+
 
     createToken(id, email) {
         return jwt.sign({id: id, email: email}, 'secretkey')

@@ -27,6 +27,14 @@ class AuthController{
             next(e)
         }
     }
+
+    isAuth(req, res, next) {
+        try {
+            res.status(200).json({ message:'yes' })
+        } catch(e) {
+            next(e)
+        }
+    }
 }
 
 export default new AuthController()

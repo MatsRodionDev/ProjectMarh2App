@@ -6,6 +6,7 @@ import cors from 'cors'
 import {User, Role} from './models/index.js'
 import router from './routes/index.js'
 import ErrorHandlingMiddleware from './middlewares/ErrorHandlingMiddleware.js'
+import seedRoles from './seed/seedRoles.js'
 
 dotenv.config()
 
@@ -22,6 +23,7 @@ const start = async () => {
     try{
         await sequelize.authenticate()
         await sequelize.sync({ force: true })
+        seedRoles()
         app.listen(PORT, () => console.log(PORT))
     } catch(e) {
         console.log(e)
