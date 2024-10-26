@@ -5,13 +5,19 @@ import RegistrationForm from "./components/RegistrationForm";
 import AuthorizationForm from "./components/AuthorizationFrom";
 import { LOGIN_ROUTE } from "../../utils/consts";
 import userApi from "../../services/userApi";
+import { useDispatch, useSelector } from 'react-redux';
+import { setRole } from "../../stores/slices/roleSlice";
 
 const Auth = () => {
     const location = useLocation().pathname
+    const dispatch = useDispatch();
 
     const logIn = async (email, password) => {
         const response = await userApi.login(email, password)
-        console.log(response)
+        
+        if(!response) return
+
+        dispatch(setRole(response.roles))
     }
 
     const registration = async (firstName, lastName, email, password) => {
@@ -21,7 +27,9 @@ const Auth = () => {
             email,
             password)
         
-        console.log(response)
+        if(!response) return
+
+        dispatch(setRole(response.roles))
     }
 
     return (

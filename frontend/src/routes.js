@@ -11,10 +11,7 @@ export const publishRoutes = [
         path: REGISTRATION_ROUTE,
         Component: Auth
     },
-    {
-        path: PROJECTS_ROUTE,
-        Component: Projects
-    },
+    
 ]
 export const workerRoutes = [
     
@@ -23,5 +20,8 @@ export const managerRoutes = [
     
 ]
 export const adminRoutes = [
-    
-]
+    {
+        path: PROJECTS_ROUTE,
+        Component: Projects
+    }
+]   

@@ -1,6 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import roleReducer from './slices/roleslice.js'
-// Импортируйте другие редюсеры здесь
+import roleReducer from './slices/roleSlice.js'
 
 const rootReducer = combineReducers({
   role: roleReducer,

@@ -11,7 +11,16 @@ class UserService {
             }]
         });
 
-        console.log(user)
+        return user
+    }
+
+    async getByIdAsync(id) {
+        const user = await User.findByPk(id, {
+            include: [{
+                model: Role, 
+                attributes: ['id', 'name'] 
+            }]
+        })
 
         return user
     }

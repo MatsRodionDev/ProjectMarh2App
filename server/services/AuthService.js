@@ -33,13 +33,21 @@ class AuthService {
         const passHash = await bcrypt.hash(dto.password, 10)
         dto.password = passHash
 
-        const newUser = await UserService.createAsync(dto)
+        await UserService.createAsync(dto)
 
-        console.log(newUser)
+        const newUser = await UserService.getByEmailAsync(dto.email)
 
-        const role = await RoleService.getRoleByIdAsync(newUser.roleId)
+        return this.createToken(newUser.id, dto.email, newUser.Role)
+    }
 
-        return this.createToken(dto.is, dto.email, role)
+    async refreshJwtAsync(id) {
+        const user = await UserService.getByIdAsync(id)
+
+        if(!user) {
+            throw ApiError.forbidden()
+        }
+
+        return this.createToken(user.id, user.email, user.Role)
     }
 
     createToken(id, email, role) {

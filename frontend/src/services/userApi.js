@@ -37,15 +37,18 @@ class UserApi {
     }
 
     async checkToken() {
-        // const token = localStorage.getItem('token'); // Или откуда вы храните токен
-        // // if (!token) {
-        // //     console.warn('No token found');
-        // //     return null;
-        // // }
+        const token = localStorage.getItem('delicious-token'); // Или откуда вы храните токен
+        if (!token) {
+            console.warn('No token found');
+            return null;
+        }
 
         try {
-            const response = await $authHost.get('api/auth/auth');
-            return response.data;
+            const {data} = await $authHost.get('api/auth/auth')
+
+            localStorage.setItem('delicious-token', data.token)
+    
+            return jwtDecode(data.token)
         } catch (e) {
             console.error('Error checking token:', e);
             return null;
