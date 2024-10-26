@@ -6,6 +6,8 @@ class AuthController{
         try {
             const { firstname, lastname, email, password } = req.body
 
+            console.log(firstname,lastname)
+
             const token = await AuthService.register(new CreateUserDto(firstname, lastname, email, password))
 
             res.status(200).json({token: token})
@@ -28,9 +30,13 @@ class AuthController{
         }
     }
 
-    isAuth(req, res, next) {
+    async isAuth(req, res, next) {
         try {
-            res.status(200).json({ message:'yes' })
+            const user = req.user
+
+            const token = await AuthService.refreshJwtAsync(user.id)
+
+            res.status(200).json({token: token})
         } catch(e) {
             next(e)
         }

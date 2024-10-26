@@ -1,19 +1,25 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import { useEffect } from "react";
-import serverApi from "./services/serverApi";
+import userApi from "./services/userApi";
+import { useDispatch, useSelector } from 'react-redux';
+import { setRole } from "./stores/slices/roleSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  const role = useSelector((state) => state.role.role);
+
   useEffect(() => {
     const checkToken = async () => {
-      const response = await serverApi.checkToken();
-
-      if (!response) {
-        console.log('Ответ не получен или токен недействителен.');
-      } else {
-        console.log('Ответ:', response);
-        // Обработайте успешную проверку токена (например, обновите состояние или перенаправьте)
+      const response = await userApi.checkToken()
+      console.log(response)
+      if(!response) {
+        console.log('error')
+        return
       }
+      dispatch(setRole(response.roles))
+      console.log(response.roles)
+      
     };
 
     checkToken();
@@ -21,7 +27,7 @@ function App() {
 
   return (
     <BrowserRouter> 
-      <AppRouter/>
+        <AppRouter/>
     </BrowserRouter>
   );
 }

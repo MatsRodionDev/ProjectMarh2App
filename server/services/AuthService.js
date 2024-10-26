@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import UserService  from './UserService.js';
+import RoleService from './RoleService.js';
 import { ApiError } from '../Errors/ApiError.js';
 
 class AuthService {
@@ -17,7 +18,7 @@ class AuthService {
             throw ApiError.badRequest('Incorrect email or password')
         }
 
-        return this.createToken(user.id, user.email)
+        return this.createToken(user.id, user.email, user.Role)
     }
 
     async register(dto) {
@@ -34,12 +35,23 @@ class AuthService {
 
         await UserService.createAsync(dto)
 
-        return this.createToken(dto.is, dto.email)
+        const newUser = await UserService.getByEmailAsync(dto.email)
+
+        return this.createToken(newUser.id, dto.email, newUser.Role)
     }
 
+    async refreshJwtAsync(id) {
+        const user = await UserService.getByIdAsync(id)
 
-    createToken(id, email) {
-        return jwt.sign({id: id, email: email}, 'secretkey')
+        if(!user) {
+            throw ApiError.forbidden()
+        }
+
+        return this.createToken(user.id, user.email, user.Role)
+    }
+
+    createToken(id, email, role) {
+        return jwt.sign({id: id, email: email, roles: role.name}, 'secretkey')
     }
 }
 

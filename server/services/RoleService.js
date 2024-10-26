@@ -1,4 +1,4 @@
-import { Role } from "../models"
+import  Role  from "../models/roleModel.js"
 
 class RoleService {
     async getRoleByIdAsync(id) {
