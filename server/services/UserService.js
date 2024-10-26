@@ -7,7 +7,7 @@ class UserService {
 
     async createAsync(dto) {
         console.log(dto)
-        await User.create(dto)
+        await User.create({...dto, roleId: 1})
     }
 }
 

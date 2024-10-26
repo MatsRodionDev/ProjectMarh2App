@@ -1,18 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 import { useEffect } from "react";
-import serverApi from "./services/serverApi";
+import userApi from "./services/userApi";
 
 function App() {
   useEffect(() => {
     const checkToken = async () => {
-      const response = await serverApi.checkToken();
+      const response = await userApi.checkToken()
 
-      if (!response) {
-        console.log('Ответ не получен или токен недействителен.');
-      } else {
-        console.log('Ответ:', response);
-        // Обработайте успешную проверку токена (например, обновите состояние или перенаправьте)
+      if(!response) {
+        console.log('error')
       }
     };
 
