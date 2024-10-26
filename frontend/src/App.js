@@ -11,6 +11,8 @@ function App() {
       if(!response) {
         console.log('error')
       }
+
+      console.log(response)
     };
 
     checkToken();
