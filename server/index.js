@@ -1,9 +1,7 @@
 import express from 'express'
-import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import sequelize from './db.js'
+import {sequelize} from './models/index.js'
 import cors from 'cors'
-import {User, Role} from './models/index.js'
 import router from './routes/index.js'
 import ErrorHandlingMiddleware from './middlewares/ErrorHandlingMiddleware.js'
 import seedRoles from './seed/seedRoles.js'
@@ -23,6 +21,12 @@ const start = async () => {
     try{
         await sequelize.authenticate()
         await sequelize.sync({ force: true })
+            .then(() => {
+                console.log("Tables were created!");
+            })
+            .catch((error) => {
+                console.error("Error creating tables: ", error);
+            });
         seedRoles()
         app.listen(PORT, () => console.log(PORT))
     } catch(e) {
