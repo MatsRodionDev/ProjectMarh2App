@@ -7,10 +7,10 @@ class ProjectController {
         try {
             const { name, description, deadline } = req.body
 
-            const project = await ProjectService.createProjectAsync(
+            await ProjectService.createProjectAsync(
                 new CreateProjectDto(name, description, deadline, false))
             
-            res.status(201).json(project)
+            res.status(201)
         } catch(e) {
             next(e)
         }
@@ -41,7 +41,7 @@ class ProjectController {
                 throw ApiError.badRequest('Id wasnt specified')
             }
 
-            await ProjectService.deleteByIdAsyn(id)
+            await ProjectService.deleteByIdAsync(id)
 
             res.status(204)
         } catch(e) {
