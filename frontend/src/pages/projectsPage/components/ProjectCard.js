@@ -7,7 +7,7 @@ const ProjectCard = ( {project} ) => {
         <Card style={{width: '100%'}} className="mb-3">
             <Card.Header>{project.name}</Card.Header>
                 <Card.Body>
-                    <Card.Title>{"Customer: " + `${project.customerName}`}</Card.Title>
+                    <Card.Title>{"Customer: " + `${project.deadline}`}</Card.Title>
                     <Card.Text>
                         {project.description}
                     </Card.Text>

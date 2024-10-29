@@ -17,7 +17,7 @@ class ProjectApi {
         try {
             const response = await $host.get(`/api/projects/${projectId}`);
            
-            return response.data; я
+            return response.data; 
         } catch (error) {
             console.error('Error fetching project:', error.response ? error.response.data : error.message);
         }
@@ -55,5 +55,5 @@ class ProjectApi {
     }
 }
 
-const userApi = new ProjectApi()
-export default userApi;
+const projectApi = new ProjectApi()
+export default projectApi;
