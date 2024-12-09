@@ -1,21 +1,8 @@
 import React from "react";
 import ProjectCard from "./ProjectCard.js";
+import projectApi from "../../../services/projectApi.js"
 
-const ProjectsList = () => {
-    const projects = [
-        {
-            id: 1,
-            name: "name 1",
-            customerName: "customer 1",
-            description: "description 1"
-        },
-        {
-            id: 2,
-            name: "name 2",
-            customerName: "customer 2",
-            description: "description 2"
-        }
-    ];
+const ProjectsList = ({projects}) => {
     return (
         <>
             {

@@ -7,10 +7,10 @@ class ProjectController {
         try {
             const { name, description, deadline } = req.body
 
-            const project = await ProjectService.createProjectAsync(
+            await ProjectService.createProjectAsync(
                 new CreateProjectDto(name, description, deadline, false))
             
-            res.status(201).json(project)
+            res.status(201)
         } catch(e) {
             next(e)
         }
@@ -37,11 +37,7 @@ class ProjectController {
         try {
             const {id} = req.props
 
-            if(!id) {
-                throw ApiError.badRequest('Id wasnt specified')
-            }
-
-            await ProjectService.deleteByIdAsyn(id)
+            await ProjectService.deleteByIdAsync(id)
 
             res.status(204)
         } catch(e) {
@@ -75,6 +71,34 @@ class ProjectController {
             const project = await ProjectService.getProjectByIdAsync(id)
 
             res.status(200).json(project)
+        } catch(e) {
+            next(e)
+        }
+    }
+
+    async addUserToProject(req, res, next) {
+        try {
+            const { projectId } = req.params
+            const { userId } = req.body
+
+            console.log(userId)
+
+            await ProjectService.addUserToProjectAsync(projectId, userId)
+
+            res.status(201).json()
+        } catch(e) {
+            next(e)
+        }
+    }
+
+    async createTaskToProject(req, res, next) {
+        try {
+            const { projectId } = req.params;
+            const taskData = req.body;
+
+            await ProjectService.createTaskForProjectAsync(projectId, taskData);
+
+            res.status(201).json()
         } catch(e) {
             next(e)
         }

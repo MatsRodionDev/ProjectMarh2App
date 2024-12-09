@@ -1,4 +1,5 @@
 import sequelize from "../db.js";
+import Task from "./taskModel.js";
 import { DataTypes } from "sequelize";
 
 const Project = sequelize.define('Projects', { 
@@ -17,7 +18,7 @@ const Project = sequelize.define('Projects', {
     },
     deadline: {
         type: DataTypes.DATE,
-        unique: true,
+        unique: false,
         allowNull: false 
     },
     isFinished: {
