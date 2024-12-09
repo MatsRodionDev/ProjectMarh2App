@@ -3,8 +3,6 @@ import ProjectCard from "./ProjectCard.js";
 import projectApi from "../../../services/projectApi.js"
 
 const ProjectsList = ({projects}) => {
-
-
     return (
         <>
             {

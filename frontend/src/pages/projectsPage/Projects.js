@@ -16,13 +16,13 @@ const Projects = () => {
 
     useEffect(() => {
         async function fetchData() {
-            await handlePageClick(currentPage)
+            await request(currentPage)
         }
 
         fetchData();
     },[])
 
-    const handlePageClick = async (page) => {
+    const request = async (page) => {
         const data = await projectApi.getProjects({
             name,
             isFinished,
@@ -40,15 +40,34 @@ const Projects = () => {
         
     } 
 
+    const handleIsFinished = (value) => {
+        setIsFinished(value)
+    }
+
+    const handleProjectName = (value) => {
+        setName(value)
+    }
+
+    const search = async () => {
+        setCurrentPage(1);
+        await request(1)
+    }
+
     return (
         <div>
            <Container 
                 className="d-flex flex-column align-items-center pt-3 pb-3"
                 style={{height: window.innerHeight - 54, width: 600}}
             >
-                <SortingMenu/> 
+                <SortingMenu
+                    isFinished={isFinished}
+                    handleIsFinished={handleIsFinished}
+                    handleProjectName={handleProjectName}
+                    projectName={name}
+                    search={search}
+                    /> 
                 <ProjectsList projects={projects}/>
-                <Page pageNumber={currentPage} pagesCount={total} handlePageClick={handlePageClick}/>
+                <Page pageNumber={currentPage} pagesCount={total} handlePageClick={request}/>
             </Container>
         </div>
     )
