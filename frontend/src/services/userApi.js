@@ -54,6 +54,36 @@ class UserApi {
             return null;
         }
     }
+
+    async getAllUsers() {
+        try {
+            const response = await $authHost.get('/api/users');
+
+            return response.data;
+        } catch (error) {
+            console.log(error)
+            this.handleError(error, 'An error occurred while fetching users.');
+        }
+    }
+
+    async getUserById(userId) {
+        try {
+            const response = await $authHost.get(`/api/users/${userId}`);
+            return response.data;
+        } catch (error) {
+            this.handleError(error, 'An error occurred while fetching the user.');
+        }
+    }
+
+    handleError(error, defaultMessage) {
+        if (error.response) {
+            throw new Error(error.response.data.message || defaultMessage);
+        } else if (error.request) {
+            throw new Error('No response received from the server.');
+        } else {
+            throw new Error('Error: ' + error.message);
+        }
+    }
 }
 
 const userApi = new UserApi()
