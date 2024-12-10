@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import projectApi from '../../services/projectApi';
 import taskApi from '../../services/taskApi';
 import { toast } from 'react-toastify';
 
 const ProjectDetail = () => {
     const { id: projectId } = useParams();
+    const navigate = useNavigate();
     const [project, setProject] = useState(null);
     const [users, setUsers] = useState([]);
     const [tasks, setTasks] = useState([]);
@@ -34,7 +35,7 @@ const ProjectDetail = () => {
     const takenTasks = filteredTasks.filter(task => !task.isCompleted && task.userId);
     const unassignedTasks = filteredTasks.filter(task => !task.userId);
     const completedTasks = filteredTasks.filter(task => task.isCompleted);
-    
+
     const filteredUsers = users.filter(user =>
         `${user.firstName} ${user.lastName}`.toLowerCase().includes(userSearchTerm.toLowerCase())
     );
@@ -55,8 +56,6 @@ const ProjectDetail = () => {
 
     const handleRejectTask = async (taskId) => {
         try {
-            console.log(account.id)
-
             await taskApi.deleteUserFromTask(taskId, account.id);
             setTasks(prevTasks => 
                 prevTasks.map(task => 
@@ -117,7 +116,6 @@ const ProjectDetail = () => {
                             )}
                         </Card.Body>
                     </Card>
-                    {users.length > 0 && (
                         <Card className="mb-3 shadow" style={{ borderRadius: '10px' }}>
                             <Card.Body>
                                 <Card.Title>Users</Card.Title>
@@ -129,7 +127,7 @@ const ProjectDetail = () => {
                                     className="mb-3"
                                     style={{ borderRadius: '5px' }}
                                 />
-                                <div style={{ maxHeight: '250px', overflowY: 'auto', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
+                                <div style={{ height: '250px', overflowY: 'auto', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
                                     {filteredUsers.length > 0 ? (
                                         filteredUsers.map(user => (
                                             <Card key={user.id} className="mb-2" style={{ borderRadius: '8px' }}>
@@ -145,12 +143,20 @@ const ProjectDetail = () => {
                                 </div>
                             </Card.Body>
                         </Card>
-                    )}
                 </Col>
                 <Col md={6}>
                     <Card className="mb-3 shadow" style={{ borderRadius: '10px' }}>
                         <Card.Body>
-                            <Card.Title>Tasks</Card.Title>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <Card.Title>Tasks</Card.Title>
+                                <Button 
+                                    variant="primary" 
+                                    onClick={() => navigate(`/project/${projectId}/add-task`)} 
+                                    style={{ marginBottom: '10px' }} // Добавляем отступ
+                                >
+                                    Add Task
+                                </Button>
+                            </div>
                             <Form.Control
                                 type="text"
                                 placeholder="Search tasks..."

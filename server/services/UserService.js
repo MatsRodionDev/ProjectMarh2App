@@ -11,7 +11,7 @@ class UserService {
             }]
         });
 
-        return user
+        return user;
     }
 
     async getByIdAsync(id) {
@@ -20,17 +20,22 @@ class UserService {
                 model: Role, 
                 attributes: ['id', 'name'] 
             }]
-        })
+        });
 
-        return user
+        return user;
     }
 
     async createAsync(dto) {
-        const user = {...dto, roleId: 1}
-        await User.create(user)
+        const user = { ...dto, roleId: 1 };
+        await User.create(user);
+        return user;
+    }
 
-        return user
+    // Новый метод для получения всех пользователей без ролей
+    async getAllUsersAsync() {
+        const users = await User.findAll();
+        return users;
     }
 }
 
-export default new UserService()
+export default new UserService();
