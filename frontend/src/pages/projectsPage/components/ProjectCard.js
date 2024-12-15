@@ -19,7 +19,10 @@ const ProjectCard = ({ project }) => {
                 <Card.Text>
                     <strong>Status: </strong>{project.isFinished ? 'Finished' : 'In Progress'}
                 </Card.Text>
-                <Button variant="primary" onClick={handleViewDetails}>View Details</Button>
+                {/* Условное отображение кнопки */}
+                {!project.isFinished && (
+                    <Button variant="primary" onClick={handleViewDetails}>View Details</Button>
+                )}
             </Card.Body>
         </Card>
     );

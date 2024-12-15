@@ -1,38 +1,39 @@
-import {  $authHost ,$host } from "./host"
-import {jwtDecode} from 'jwt-decode'
+import { current } from "@reduxjs/toolkit";
+import { $authHost, $host } from "./host";
+import { jwtDecode } from 'jwt-decode';
 
 class UserApi {
     async registration(firstname, lastname, email, password) {
         try {
-            const {data} = await $host.post('api/auth/registration', {
+            const { data } = await $host.post('api/auth/registration', {
                 firstname,
                 lastname,
                 email,
                 password
-            })
+            });
 
-            localStorage.setItem('delicious-token', data.token)
-    
-            return jwtDecode(data.token)
-        } catch(e) {
-            console.log(e)
-            return null
+            localStorage.setItem('delicious-token', data.token);
+
+            return jwtDecode(data.token);
+        } catch (e) {
+            console.log(e);
+            return null;
         }
     }
 
     async login(email, password) {
         try {
-            const {data} = await $host.post('api/auth/login', {
+            const { data } = await $host.post('api/auth/login', {
                 email,
                 password
-            })
+            });
 
-            localStorage.setItem('delicious-token', data.token)
-    
-            return jwtDecode(data.token)
-        } catch(e) {
-            console.log(e)
-            return null
+            localStorage.setItem('delicious-token', data.token);
+
+            return jwtDecode(data.token);
+        } catch (e) {
+            console.log(e);
+            return null;
         }
     }
 
@@ -44,11 +45,11 @@ class UserApi {
         }
 
         try {
-            const {data} = await $authHost.get('api/auth/auth')
+            const { data } = await $authHost.get('api/auth/auth');
 
-            localStorage.setItem('delicious-token', data.token)
-    
-            return jwtDecode(data.token)
+            localStorage.setItem('delicious-token', data.token);
+
+            return jwtDecode(data.token);
         } catch (e) {
             console.error('Error checking token:', e);
             return null;
@@ -61,17 +62,33 @@ class UserApi {
 
             return response.data;
         } catch (error) {
-            console.log(error)
+            console.log(error);
             this.handleError(error, 'An error occurred while fetching users.');
         }
     }
 
-    async getUserById(userId) {
+    async getUserProfile() {
         try {
-            const response = await $authHost.get(`/api/users/${userId}`);
+            const response = await $authHost.get(`/api/users/profile`);
             return response.data;
         } catch (error) {
             this.handleError(error, 'An error occurred while fetching the user.');
+        }
+    }
+
+    async changePassword(currentPass, newPass) {
+        try {
+            var response = await $authHost.put(`/api/auth/pass`, {
+                currentPass,
+                newPass
+            });
+
+            console.log(response)
+
+            return { message: 'Password changed successfully' };
+        } catch (error) {
+            console.log(error)
+            this.handleError(error, 'An error occurred while changing the password.');
         }
     }
 
@@ -86,5 +103,5 @@ class UserApi {
     }
 }
 
-const userApi = new UserApi()
+const userApi = new UserApi();
 export default userApi;

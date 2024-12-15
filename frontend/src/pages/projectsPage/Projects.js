@@ -12,7 +12,7 @@ const Projects = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [total, setTotal] = useState(0)
 
-    const pageSize = 1
+    const pageSize = 3
 
     useEffect(() => {
         async function fetchData() {
@@ -35,7 +35,7 @@ const Projects = () => {
         if(data) {
             setProjects(data.projects)
             setCurrentPage(data.currentPage)
-            setTotal(data.total)
+            setTotal(data.totalPages)
         }
         
     } 

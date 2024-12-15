@@ -7,6 +7,8 @@ const router = new Router();
 
 router.post('/login', authController.login)
 router.post('/registration', authController.registration)
+router.put('/pass',authenticationMiddleware, authController.changPass)
 router.get('/auth',authenticationMiddleware , authController.isAuth)
+
 
 export default router
