@@ -1,5 +1,7 @@
 import User from '../models/userModel.js';
 import Role from '../models/roleModel.js';
+import bcrypt from 'bcrypt'; 
+import { ApiError } from "../Errors/ApiError.js"; 
 
 class UserService {
     async getByEmailAsync(email) {
@@ -22,6 +24,10 @@ class UserService {
             }]
         });
 
+        if (!user) {
+            throw ApiError.badRequest('User not found');
+        }
+
         return user;
     }
 
@@ -31,10 +37,27 @@ class UserService {
         return user;
     }
 
-    // Новый метод для получения всех пользователей без ролей
     async getAllUsersAsync() {
         const users = await User.findAll();
         return users;
+    }
+
+    async changePasswordAsync(userId, oldPassword, newPassword) {
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            throw ApiError.badRequest('User not found');
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            throw ApiError.badRequest('Old password is incorrect');
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await User.update({ password: hashedPassword }, {
+            where: { id: userId }
+        });
     }
 }
 

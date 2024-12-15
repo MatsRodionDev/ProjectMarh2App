@@ -75,12 +75,14 @@ const AddUsersToProject = () => {
                                 const isUserInProject = projectUsers.some(projectUser => projectUser.id === user.id);
                                 return (
                                     <Col md={4} key={user.id} className="mb-3">
-                                        <Card className="shadow-sm" style={{ borderRadius: '10px', transition: 'transform 0.2s' }}>
+                                        <Card className="shadow-sm" style={{ borderRadius: '10px', height: '150px', transition: 'transform 0.2s' }}>
                                             <Card.Body>
                                                 <Card.Title className="font-weight-bold">
                                                     {user.firstName} {user.lastName}
                                                 </Card.Title>
-                                                <Card.Text className="text-muted">{user.email}</Card.Text>
+                                                <Card.Text style={{ fontSize: '0.9rem' }} className="text-muted">
+                                                    {user.email}
+                                                </Card.Text>
                                                 {isUserInProject ? (
                                                     <Button variant="secondary" disabled>
                                                         Already in Project
