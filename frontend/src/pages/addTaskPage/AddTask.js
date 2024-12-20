@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import projectApi from "../../services/projectApi"; // Импортируем ProjectApi
+import projectApi from "../../services/projectApi"; 
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Импорт стилей для уведомлений
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const AddTask = () => {
-    const { id: projectId } = useParams(); // Получение projectId из URL
+    const { id: projectId } = useParams(); 
     const [taskName, setTaskName] = useState('');
     const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState('');
@@ -21,10 +21,10 @@ const AddTask = () => {
                 description,
                 deadline,
             });
-            toast.success('Task added successfully!'); // Успешное уведомление
-            navigate(`/project/${projectId}`); // Перенаправление на страницу проекта после добавления задачи
+            toast.success('Task added successfully!');
+            navigate(`/projects/${projectId}`); 
         } catch (error) {
-            toast.error(error.message || 'An error occurred while adding the task.'); // Уведомление об ошибке
+            toast.error(error.message || 'An error occurred while adding the task.'); 
         }
     };
 
@@ -70,7 +70,7 @@ const AddTask = () => {
                     Add Task
                 </Button>
             </Form>
-            <ToastContainer /> {/* Контейнер для уведомлений */}
+            <ToastContainer /> 
         </Container>
     );
 };

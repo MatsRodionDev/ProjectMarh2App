@@ -1,6 +1,7 @@
 import sequelize from "../db.js";
 import { DataTypes } from "sequelize";
 import Role from "./roleModel.js";
+import Image from "./imageModel.js";
 
 const User = sequelize.define('Users', { 
     id: {
@@ -32,6 +33,14 @@ const User = sequelize.define('Users', {
             key: 'id'
         },
         allowNull: false 
+    },
+    imageId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Image, 
+            key: 'id'
+        },
+        allowNull: true 
     }
 });
 

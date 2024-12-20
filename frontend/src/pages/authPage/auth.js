@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { setRole } from "../../stores/slices/roleSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { setAccount } from "../../stores/slices/accountSlice";
 
 const Auth = () => {
     const location = useLocation().pathname;
@@ -18,24 +19,24 @@ const Auth = () => {
         const response = await userApi.login(email, password);
         
         if (!response) {
-            toast.error("Login failed. Please check your credentials."); // Уведомление об ошибке
+            toast.error("Login failed. Please check your credentials."); 
             return;
         }
 
         dispatch(setRole(response.roles));
-        toast.success("Logged in successfully!"); // Уведомление об успехе
+        dispatch(setAccount(response));
     };
 
     const registration = async (firstName, lastName, email, password) => {
         const response = await userApi.registration(firstName, lastName, email, password);
-        
+
         if (!response) {
-            toast.error("Registration failed. Please try again."); // Уведомление об ошибке
+            toast.error(`Registration failed. User with this email already exists`);
             return;
         }
 
         dispatch(setRole(response.roles));
-        toast.success("Registration successful! You can now log in."); // Уведомление об успехе
+        dispatch(setAccount(response));
     };
 
     return (

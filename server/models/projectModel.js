@@ -24,6 +24,22 @@ const Project = sequelize.define('Projects', {
     isFinished: {
         type: DataTypes.BOOLEAN,
         allowNull: false 
+    },
+    projectTypeId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'ProjectTypes', 
+            key: 'id'
+        },
+        allowNull: false
+    },
+    customerId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Customers', // Имя таблицы
+            key: 'id'
+        },
+        allowNull: false
     }
 });
 

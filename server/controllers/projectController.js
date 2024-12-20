@@ -1,16 +1,15 @@
 import { CreateProjectDto } from "../dto/project/createProjectDto.js"
 import ProjectService from "../services/ProjectService.js"
 import { ApiError } from "../Errors/ApiError.js"
+import { json } from "sequelize"
 
 class ProjectController {
     async createProject(req, res, next) {
         try {
-            const { name, description, deadline } = req.body
-
             await ProjectService.createProjectAsync(
-                new CreateProjectDto(name, description, deadline, false))
+                { isFinished: false, ...req.body})
             
-            res.status(201)
+            res.status(201).json()
         } catch(e) {
             next(e)
         }
@@ -27,7 +26,7 @@ class ProjectController {
                 deadline
             })
 
-            res.status(204)
+            res.status(204).json()
         } catch(e) {
             next(e)
         }
@@ -39,7 +38,7 @@ class ProjectController {
 
             await ProjectService.deleteByIdAsync(id)
 
-            res.status(204)
+            res.status(204).json()
         } catch(e) {
             next(e)
         }
@@ -47,11 +46,13 @@ class ProjectController {
 
     async getProjects(req, res, next) {
         try {
-            const { isFinished, name, page = 1, pageSize = 5 } = req.query;
+            const { isFinished, name, projectTypeId, customerId, page = 1, pageSize = 5 } = req.query;
     
             const criteria = {
-                isFinished: isFinished === 'true' ? true : isFinished === 'false' ? false : undefined,
+                isFinished: isFinished === 'true' ? true : undefined,
                 name: name || undefined,
+                projectTypeId: projectTypeId ? parseInt(projectTypeId, 10) : undefined,
+                customerId: customerId ? parseInt(customerId, 10) : undefined,
                 page: parseInt(page, 10),
                 pageSize: parseInt(pageSize, 10) 
             };
