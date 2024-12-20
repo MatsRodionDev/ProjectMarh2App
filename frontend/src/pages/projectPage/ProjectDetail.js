@@ -5,9 +5,10 @@ import { useSelector } from 'react-redux';
 import projectApi from '../../services/projectApi';
 import taskApi from '../../services/taskApi';
 import { toast } from 'react-toastify';
+import { FaPlus } from 'react-icons/fa'; 
 
 const ProjectDetail = () => {
-    const { id: projectId } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
     const [project, setProject] = useState(null);
     const [users, setUsers] = useState([]);
@@ -16,17 +17,18 @@ const ProjectDetail = () => {
     const [userSearchTerm, setUserSearchTerm] = useState('');
 
     const account = useSelector((state) => state.account.account);
+    const role = useSelector((state) => state.role.role); 
 
     useEffect(() => {
         const fetchData = async () => {
-            const projectData = await projectApi.getProjectById(projectId);
+            const projectData = await projectApi.getProjectById(id);
             setProject(projectData);
             setUsers(projectData.Users);
             setTasks(projectData.Tasks);
         };
 
         fetchData();
-    }, [projectId]);
+    }, [id]);
 
     const filteredTasks = tasks.filter(task =>
         task.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -95,12 +97,23 @@ const ProjectDetail = () => {
     return (
         <Container className="mt-4">
             {project && (
-                <h2 style={{ textAlign: 'center', fontWeight: 'bold', marginBottom: '20px', color: '#343a40' }}>
-                    {project.name}
-                </h2>
+                <div className="d-flex justify-content-between align-items-center flex-wrap">
+                    <h2 style={{ fontWeight: 'bold', marginBottom: '20px', color: '#343a40' }}>
+                        {project.name}
+                    </h2>
+                    {role === 'Admin' && (
+                        <Button 
+                            variant="info" 
+                            onClick={() => navigate(`/projects/${id}/report`)} 
+                            style={{ marginLeft: '20px' }}
+                        >
+                            Report
+                        </Button>
+                    )}
+                </div>
             )}
             <Row>
-                <Col md={6}>
+                <Col xs={12} md={6}>
                     <Card className="mb-3 shadow" style={{ borderRadius: '10px' }}>
                         <Card.Body>
                             {project && (
@@ -112,50 +125,72 @@ const ProjectDetail = () => {
                                     <Card.Text>
                                         <strong>Status:</strong> {project.isFinished ? 'Finished' : 'In Progress'}
                                     </Card.Text>
+                                    {role === 'Admin' && (
+                                        <Button 
+                                            variant="warning" 
+                                            onClick={() => navigate(`/projects/${id}/update`)} 
+                                            style={{ marginTop: '10px' }}
+                                        >
+                                            Edit 
+                                        </Button>
+                                    )}
                                 </>
                             )}
                         </Card.Body>
                     </Card>
-                        <Card className="mb-3 shadow" style={{ borderRadius: '10px' }}>
-                            <Card.Body>
+                    <Card className="mb-3 shadow" style={{ borderRadius: '10px' }}>
+                        <Card.Body>
+                            <div className="d-flex justify-content-between align-items-center">
                                 <Card.Title>Users</Card.Title>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Search users..."
-                                    value={userSearchTerm}
-                                    onChange={(e) => setUserSearchTerm(e.target.value)}
-                                    className="mb-3"
-                                    style={{ borderRadius: '5px' }}
-                                />
-                                <div style={{ height: '250px', overflowY: 'auto', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
-                                    {filteredUsers.length > 0 ? (
-                                        filteredUsers.map(user => (
-                                            <Card key={user.id} className="mb-2" style={{ borderRadius: '8px' }}>
-                                                <Card.Body>
-                                                    <Card.Title>{user.firstName} {user.lastName}</Card.Title>
-                                                    <Card.Text className="text-muted">{user.email}</Card.Text>
-                                                </Card.Body>
-                                            </Card>
-                                        ))
-                                    ) : (
-                                        <Card.Text>No users found.</Card.Text>
-                                    )}
-                                </div>
-                            </Card.Body>
-                        </Card>
+                                {role === 'Admin' && (
+                                    <Button 
+                                        variant="primary" 
+                                        onClick={() => navigate(`/projects/${id}/add-user`)} 
+                                        style={{ marginLeft: 'auto' }}
+                                    >
+                                        <FaPlus/>
+                                    </Button>
+                                )}
+                            </div>
+                            <Form.Control
+                                type="text"
+                                placeholder="Search users..."
+                                value={userSearchTerm}
+                                onChange={(e) => setUserSearchTerm(e.target.value)}
+                                className="mb-3"
+                                style={{ borderRadius: '5px', marginTop: '10px' }} 
+                            />
+                            <div style={{ height: '250px', overflowY: 'auto', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
+                                {filteredUsers.length > 0 ? (
+                                    filteredUsers.map(user => (
+                                        <Card key={user.id} className="mb-2" style={{ borderRadius: '8px' }}>
+                                            <Card.Body>
+                                                <Card.Title>{user.firstName} {user.lastName}</Card.Title>
+                                                <Card.Text className="text-muted">{user.email}</Card.Text>
+                                            </Card.Body>
+                                        </Card>
+                                    ))
+                                ) : (
+                                    <Card.Text>No users found.</Card.Text>
+                                )}
+                            </div>
+                        </Card.Body>
+                    </Card>
                 </Col>
-                <Col md={6}>
+                <Col xs={12} md={6}>
                     <Card className="mb-3 shadow" style={{ borderRadius: '10px' }}>
                         <Card.Body>
                             <div className="d-flex justify-content-between align-items-center">
                                 <Card.Title>Tasks</Card.Title>
-                                <Button 
-                                    variant="primary" 
-                                    onClick={() => navigate(`/project/${projectId}/add-task`)} 
-                                    style={{ marginBottom: '10px' }} // Добавляем отступ
-                                >
-                                    Add Task
-                                </Button>
+                                {role === 'Admin' && (
+                                    <Button 
+                                        variant="primary" 
+                                        onClick={() => navigate(`/projects/${id}/add-task`)} 
+                                        style={{ marginBottom: '10px' }}
+                                    >
+                                       <FaPlus/>
+                                    </Button>
+                                )}
                             </div>
                             <Form.Control
                                 type="text"
@@ -173,9 +208,11 @@ const ProjectDetail = () => {
                                             takenTasks.map(task => (
                                                 <Card className="mb-2" key={task.id} style={{ borderRadius: '8px', position: 'relative' }}>
                                                     <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-                                                        <Button variant="light" onClick={() => handleDeleteTask(task.id)} style={{ border: 'none', background: 'transparent' }}>
-                                                            &times;
-                                                        </Button>
+                                                        {role === 'Admin' && (
+                                                            <Button variant="light" onClick={() => handleDeleteTask(task.id)} style={{ border: 'none', background: 'transparent' }}>
+                                                                &times;
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                     <Card.Body>
                                                         <Card.Title>{task.title}</Card.Title>
@@ -207,9 +244,11 @@ const ProjectDetail = () => {
                                             unassignedTasks.map(task => (
                                                 <Card className="mb-2" key={task.id} style={{ borderRadius: '8px', position: 'relative' }}>
                                                     <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-                                                        <Button variant="light" onClick={() => handleDeleteTask(task.id)} style={{ border: 'none', background: 'transparent' }}>
-                                                            &times;
-                                                        </Button>
+                                                        {role === 'Admin' && (
+                                                            <Button variant="light" onClick={() => handleDeleteTask(task.id)} style={{ border: 'none', background: 'transparent' }}>
+                                                                &times;
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                     <Card.Body>
                                                         <Card.Title>{task.title}</Card.Title>
@@ -234,9 +273,11 @@ const ProjectDetail = () => {
                                             completedTasks.map(task => (
                                                 <Card className="mb-2" key={task.id} style={{ borderRadius: '8px', position: 'relative' }}>
                                                     <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-                                                        <Button variant="light" onClick={() => handleDeleteTask(task.id)} style={{ border: 'none', background: 'transparent' }}>
-                                                            &times;
-                                                        </Button>
+                                                        {role === 'Admin' && (
+                                                            <Button variant="light" onClick={() => handleDeleteTask(task.id)} style={{ border: 'none', background: 'transparent' }}>
+                                                                &times;
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                     <Card.Body>
                                                         <Card.Title>{task.title}</Card.Title>

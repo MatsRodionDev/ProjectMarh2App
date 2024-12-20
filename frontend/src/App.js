@@ -3,36 +3,59 @@ import AppRouter from "./components/AppRouter";
 import { useEffect } from "react";
 import userApi from "./services/userApi";
 import { useDispatch, useSelector } from 'react-redux';
-import { setRole } from "./stores/slices/roleSlice";
+import { setRole, setLoading } from "./stores/slices/roleSlice";
 import { setAccount} from "./stores/slices/accountSlice"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Spinner } from 'react-bootstrap';
+import Reports from "./pages/check";
+import UserTable from "./pages/usersTablePage/UserTable";
+import NavigationBar from "./components/NavBar";
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   const dispatch = useDispatch();
-  const role = useSelector((state) => state.role.role);
+  const { role, loading } = useSelector((state) => state.role);
 
   useEffect(() => {
     const checkToken = async () => {
-      const response = await userApi.checkToken()
-      console.log(response)
-      if(!response) {
-        console.log('error')
-        return
-      }
-      dispatch(setRole(response.roles))
-      dispatch(setAccount(response))
-      console.log(response.roles)
-      
-    };
+      dispatch(setLoading(true)); 
 
+      const response = await userApi.checkToken();
+
+      dispatch(setLoading(false)); 
+
+      if (!response) {
+        console.log('error');
+        dispatch(setRole(null));
+        dispatch(setAccount(null));
+        return;
+      }
+
+      dispatch(setRole(response.roles));
+      dispatch(setAccount(response));
+     
+    };
+    
     checkToken();
-  }, []);
+    
+  }, [dispatch]);
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    ); 
+  }
 
   return (
-    <BrowserRouter> 
-        <AppRouter/>
-        <ToastContainer />
+    <BrowserRouter>
+      <NavigationBar />
+      <AppRouter />
+      <ToastContainer />
     </BrowserRouter>
   );
 }

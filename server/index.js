@@ -5,6 +5,7 @@ import cors from 'cors'
 import router from './routes/index.js'
 import ErrorHandlingMiddleware from './middlewares/ErrorHandlingMiddleware.js'
 import seedRoles from './seed/seedRoles.js'
+import path from "path";
 
 dotenv.config()
 
@@ -16,6 +17,8 @@ app.use(cors())
 app.use(express.json())
 app.use('/api', router)
 app.use(ErrorHandlingMiddleware)
+const staticPath = path.resolve("uploads/images");
+app.use("/uploads/images", express.static(staticPath));
 
 const start = async () => {
     try{

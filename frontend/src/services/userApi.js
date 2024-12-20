@@ -38,7 +38,7 @@ class UserApi {
     }
 
     async checkToken() {
-        const token = localStorage.getItem('delicious-token'); // Или откуда вы храните токен
+        const token = localStorage.getItem('delicious-token');
         if (!token) {
             console.warn('No token found');
             return null;
@@ -51,19 +51,48 @@ class UserApi {
 
             return jwtDecode(data.token);
         } catch (e) {
+            localStorage.setItem('delicious-token', "")
             console.error('Error checking token:', e);
             return null;
         }
     }
 
-    async getAllUsers() {
+    async getAll() {
         try {
-            const response = await $authHost.get('/api/users');
+            const response = await $authHost.get(`/api/users/all`);
 
             return response.data;
         } catch (error) {
             console.log(error);
             this.handleError(error, 'An error occurred while fetching users.');
+        }
+    }
+
+    async getAllUsers(page = 0, limit = 10) {
+        try {
+            const response = await $authHost.get(`/api/users`, {
+                params: {
+                    page,
+                    limit
+                }
+            });
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            this.handleError(error, 'An error occurred while fetching users.');
+        }
+    }
+
+    async getRoles() {
+        try {
+            const response = await $authHost.get(`/api/roles`);
+
+            return response.data;
+        } catch (error) {
+            console.log(error)
+
+            this.handleError(error, 'An error occurred while fetching the user.');
         }
     }
 
@@ -76,19 +105,54 @@ class UserApi {
         }
     }
 
+    async updateUserRole(userId, newRole) {
+        try {
+            console.log(userId)
+            console.log(newRole)
+            await $authHost.put(`/api/users/${userId}`, { role: newRole });
+        } catch (error) {
+            console.error('Failed to update user role', error);
+            throw error;
+        }
+    }
+
     async changePassword(currentPass, newPass) {
         try {
-            var response = await $authHost.put(`/api/auth/pass`, {
+            const response = await $authHost.put(`/api/auth/pass`, {
                 currentPass,
                 newPass
             });
 
-            console.log(response)
+            console.log(response);
 
             return { message: 'Password changed successfully' };
         } catch (error) {
-            console.log(error)
+            console.log(error);
             this.handleError(error, 'An error occurred while changing the password.');
+        }
+    }
+
+    async uploadImage(imageData) {
+        try {
+            const response = await $authHost.patch('/api/users/upload', imageData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to upload image', error);
+            this.handleError(error, 'An error occurred while uploading the image.');
+        }
+    }
+
+    async deleteImage() {
+        try {
+            const response = await $authHost.delete('/api/users/upload');
+            return response.data;
+        } catch (error) {
+            console.error('Failed to delete image', error);
+            this.handleError(error, 'An error occurred while deleting the image.');
         }
     }
 

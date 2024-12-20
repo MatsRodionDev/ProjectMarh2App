@@ -2,7 +2,8 @@ import { Project } from "../models/index.js"
 import { ApiError } from "../Errors/ApiError.js"
 import { Op } from "sequelize";
 import {User} from "../models/index.js";
-import {Task} from "../models/index.js";
+import {Task, Customer, ProjectType} from "../models/index.js";
+
  
 class ProjectService {
     async addUserToProjectAsync(projectId, userId) {
@@ -55,18 +56,37 @@ class ProjectService {
     }
 
     async getAllProjectsAsync() {
-        const projects = await Project.findAll()
+        const projects = await Project.findAll({
+            include: [
+                {
+                    model: Customer, 
+                    attributes: ['id', 'name'] 
+                },
+                {
+                    model: ProjectType,
+                    attributes: ['id', 'name'] 
+                }
+            ]
+        });
 
         return projects
     }
 
     async getProjectByCriteria(criteria) {
-        const { isFinished, name, page = 1, pageSize = 5 } = criteria;
+        const { isFinished, name, customerId, projectTypeId, page = 1, pageSize = 5 } = criteria;
 
         const whereClause = {};
             
         if (isFinished !== undefined) {
             whereClause.isFinished = isFinished; 
+        }
+
+        if (customerId !== undefined && customerId !== null) {
+            whereClause.customerId = customerId; 
+        }
+
+        if (projectTypeId !== undefined && projectTypeId !== null) {
+            whereClause.projectTypeId = projectTypeId; 
         }
         
         if (name) {
@@ -81,6 +101,21 @@ class ProjectService {
             order: [['deadline', 'ASC']], 
             limit: pageSize, 
             offset: offset, 
+            include: [
+                {
+                    model: Customer, 
+                    attributes: ['id', 'name'] 
+                },
+                {
+                    model: ProjectType,
+                    attributes: ['id', 'name'] 
+                },
+                {
+                    model: User,
+                    attributes: { exclude: ['password'] },
+                }
+            ]
+            
         });
 
             

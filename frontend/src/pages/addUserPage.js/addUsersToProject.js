@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Form, Button, Spinner } from 'react-bootstrap';
+import { Container, Card, Button, Spinner } from 'react-bootstrap';
 import userApi from '../../services/userApi';
 import projectApi from '../../services/projectApi';
 import { toast } from 'react-toastify';
+import SearchBar from './components/SearchBar';
+import UserList from './components/UserList';
+import './styles/AddUsersToProject.css';
 
 const AddUsersToProject = () => {
     const { id: projectId } = useParams();
@@ -14,33 +17,26 @@ const AddUsersToProject = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            const allUsers = await userApi.getAllUsers();
-            setUsers(allUsers);
-        };
-
-        const fetchProjectUsers = async () => {
-            const projectData = await projectApi.getProjectById(projectId);
-            setProjectUsers(projectData.Users);
-        };
-
         const fetchData = async () => {
-            await fetchUsers();
-            await fetchProjectUsers();
-            setLoading(false);
+            try {
+                const allUsers = await userApi.getAll();
+                const projectData = await projectApi.getProjectById(projectId);
+                setUsers(allUsers);
+                setProjectUsers(projectData.Users);
+            } catch (error) {
+                toast.error('Failed to load data: ' + (error.message || 'An error occurred'));
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchData();
     }, [projectId]);
 
-    const filteredUsers = users.filter(user =>
-        `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
     const handleAddUserToProject = async (userId) => {
         try {
             await projectApi.addUserToProject(projectId, userId);
-            setProjectUsers(prevUsers => [...prevUsers, users.find(user => user.id === userId)]);
+            setProjectUsers((prevUsers) => [...prevUsers, users.find((user) => user.id === userId)]);
             toast.success('User successfully added to project!');
         } catch (error) {
             toast.error('Failed to add user: ' + (error.message || 'An error occurred'));
@@ -48,56 +44,22 @@ const AddUsersToProject = () => {
     };
 
     return (
-        <Container className="mt-4">
+        <Container className="add-users-container mt-4">
             <h2 className="text-center font-weight-bold mb-4">Add Users to Project</h2>
-            <Form.Control
-                type="text"
-                placeholder="Search users..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="mb-4"
-                style={{
-                    borderRadius: '5px',
-                    padding: '10px',
-                    border: '1px solid #ced4da',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
-                }}
-            />
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             {loading ? (
                 <div className="text-center">
                     <Spinner animation="border" variant="primary" />
                 </div>
             ) : (
-                <Card className="shadow-sm mb-4" style={{ height: '300px', overflowY: 'auto', borderRadius: '10px' }}>
+                <Card className="users-card shadow-sm mb-4">
                     <Card.Body>
-                        <Row>
-                            {filteredUsers.map(user => {
-                                const isUserInProject = projectUsers.some(projectUser => projectUser.id === user.id);
-                                return (
-                                    <Col md={4} key={user.id} className="mb-3">
-                                        <Card className="shadow-sm" style={{ borderRadius: '10px', height: '150px', transition: 'transform 0.2s' }}>
-                                            <Card.Body>
-                                                <Card.Title className="font-weight-bold">
-                                                    {user.firstName} {user.lastName}
-                                                </Card.Title>
-                                                <Card.Text style={{ fontSize: '0.9rem' }} className="text-muted">
-                                                    {user.email}
-                                                </Card.Text>
-                                                {isUserInProject ? (
-                                                    <Button variant="secondary" disabled>
-                                                        Already in Project
-                                                    </Button>
-                                                ) : (
-                                                    <Button variant="primary" onClick={() => handleAddUserToProject(user.id)}>
-                                                        Add to Project
-                                                    </Button>
-                                                )}
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                );
-                            })}
-                        </Row>
+                        <UserList
+                            users={users}
+                            projectUsers={projectUsers}
+                            searchTerm={searchTerm}
+                            onAddUser={handleAddUserToProject}
+                        />
                     </Card.Body>
                 </Card>
             )}
