@@ -1,0 +1,20 @@
+.user-table-title {
+    font-size: 2rem;
+    text-align: center;
+}
+
+.user-table {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .user-table-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .user-table-title {
+        font-size: 1.2rem;
+    }
+}

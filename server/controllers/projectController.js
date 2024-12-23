@@ -1,6 +1,5 @@
 import { CreateProjectDto } from "../dto/project/createProjectDto.js"
 import ProjectService from "../services/ProjectService.js"
-import { ApiError } from "../Errors/ApiError.js"
 import { json } from "sequelize"
 
 class ProjectController {
@@ -17,7 +16,7 @@ class ProjectController {
 
     async updateProject(req, res, next) {
         try {
-            const {id} = req.props
+            const {id} = req.params
             const { name, description, deadline } = req.body
 
             await ProjectService.updateProjectAsync(id, {
@@ -34,7 +33,7 @@ class ProjectController {
 
     async deleteProject(req, res, next) {
         try {
-            const {id} = req.props
+            const {id} = req.params
 
             await ProjectService.deleteByIdAsync(id)
 

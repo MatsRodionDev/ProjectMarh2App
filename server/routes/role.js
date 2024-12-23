@@ -5,7 +5,7 @@ import authorizeRoles from "../middlewares/authorizationMiddleware.js";
 
 const router = new Router();
 
-router.get('/', roleController.getAllRolesAsync)
+router.get('/',authenticationMiddleware,authorizeRoles('Admin'), roleController.getAllRolesAsync)
 
 
 export default router

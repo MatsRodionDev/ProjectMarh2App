@@ -16,7 +16,7 @@ const SortingMenu = ({
     handleCustomerId,
     projectTypes,
     handleProjectTypeId,
-    isAdmin // Проп для проверки роли администратора
+    isAdmin 
 }) => {
     const [show, setShow] = useState(false);
     const [selectedCustomerId, setSelectedCustomerId] = useState(null);

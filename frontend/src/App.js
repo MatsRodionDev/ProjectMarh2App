@@ -8,7 +8,6 @@ import { setAccount} from "./stores/slices/accountSlice"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Spinner } from 'react-bootstrap';
-import Reports from "./pages/check";
 import UserTable from "./pages/usersTablePage/UserTable";
 import NavigationBar from "./components/NavBar";
 import '@fortawesome/fontawesome-free/css/all.min.css';

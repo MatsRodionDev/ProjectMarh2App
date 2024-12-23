@@ -4,12 +4,12 @@ import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
 const ProjectCard = ({ project }) => {
-    const navigate = useNavigate(); // Получаем функцию navigate
+    const navigate = useNavigate(); 
     const account = useSelector((state) => state.account.account)
     const role = useSelector((state) => state.role.role)
 
     if (!project) {
-        return <div>No project data available.</div>; // Отображаем сообщение об отсутствии данных
+        return <div>No project data available.</div>;
     }
 
 
@@ -31,7 +31,6 @@ const ProjectCard = ({ project }) => {
                 <Card.Text>
                     <strong>Project Type: </strong>{project.ProjectType?.name || 'N/A'}
                 </Card.Text>
-                {/* Условное отображение кнопки */}
                 {(role == 'Admin' || (!project.isFinished && project.Users.find(u => u.id == account.id))) && (
                     <Button variant="primary" onClick={() => navigate(`/projects/${project.id}`)}>View Details</Button>
                 )}

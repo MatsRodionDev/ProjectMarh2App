@@ -3,8 +3,12 @@ import { useParams } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Chart } from 'react-chartjs-2';
 import projectApi from "../../services/projectApi";
+
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const ProjectReport = () => {
     const { id } = useParams();
@@ -68,11 +72,11 @@ const ProjectReport = () => {
         },
         chartContainer: {
             marginTop: '20px',
-            height: '400px', // Increased height for more space
+            height: '400px', 
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            width: '100%', // Ensure full width
+            width: '100%', 
         },
         chartWrapper: {
             display: 'flex',
@@ -83,7 +87,6 @@ const ProjectReport = () => {
         },
     };
 
-    // Проверка наличия данных проекта
     if (!project) {
         return <div>Loading...</div>;
     }
@@ -94,7 +97,6 @@ const ProjectReport = () => {
     const ongoingTasks = tasks.filter(task => task.userId !== null && !task.isCompleted).length;
     const notAssignedTasks = totalTasks - completedTasks - ongoingTasks;
 
-    // Данные для графиков
     const completedChartData = {
         labels: ['Completed Tasks'],
         datasets: [
@@ -128,7 +130,6 @@ const ProjectReport = () => {
         ],
     };
 
-    // Опции для графиков
     const chartOptions = {
         responsive: true,
         scales: {
@@ -178,8 +179,6 @@ const ProjectReport = () => {
                     <Card.Text>
                         <strong>Project Type: </strong>{project.ProjectType?.name || 'N/A'}
                     </Card.Text>
-                    
-                    {/* Графики */}
                     <div style={styles.chartWrapper}>
                         <h5>Completed Tasks</h5>
                         <div style={styles.chartContainer}>
@@ -198,8 +197,6 @@ const ProjectReport = () => {
                             <Bar data={notAssignedChartData} options={chartOptions} />
                         </div>
                     </div>
-
-                    {/* Кнопки с отступами */}
                     <div style={styles.buttonContainer}>
                         <Button variant="primary" onClick={handleExportExcel} style={styles.button}>
                             Export to Excel
