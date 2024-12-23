@@ -1,4 +1,3 @@
-import { ApiError } from "../Errors/ApiError.js";
 import CustomerService from "../services/CustomerService.js";
 
 class CustomerController {

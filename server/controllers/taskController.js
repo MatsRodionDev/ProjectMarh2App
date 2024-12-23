@@ -1,4 +1,3 @@
-import { ApiError } from "../Errors/ApiError.js";
 import TaskService from "../services/TaskService.js";
 
 class TaskController {

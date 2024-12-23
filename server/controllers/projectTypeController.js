@@ -1,4 +1,3 @@
-import { ApiError } from "../Errors/ApiError.js";
 import ProjectTypeService from "../services/ProjectTypeService.js";
 
 class ProjectTypeController {

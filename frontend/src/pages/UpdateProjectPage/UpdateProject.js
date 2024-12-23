@@ -52,7 +52,7 @@ const UpdateProject = () => {
             const project = await projectApi.getProjectById(id);
             setName(project.name);
             setDescription(project.description);
-            setDeadline(project.deadline.split('T')[0]); // Установка текущего значения deadline
+            setDeadline(project.deadline.split('T')[0]); 
             setCustomerId(project.customerId);
             setProjectTypeId(project.projectTypeId);
             setIsFinished(project.isFinished);
