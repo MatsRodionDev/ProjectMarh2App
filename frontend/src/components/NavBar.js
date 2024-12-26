@@ -12,7 +12,7 @@ const NavigationBar = () => {
     const role = useSelector((state) => state.role.role);
     const [isOpen, setIsOpen] = useState(false);
 
-    // Проверка на ширину экрана с использованием useMediaQuery
+  
     const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
 
     if (!role) {
@@ -31,7 +31,7 @@ const NavigationBar = () => {
     };
 
     const handleNavLinkClick = () => {
-        setIsOpen(false); // Закрываем меню при нажатии на навигационную ссылку
+        setIsOpen(false); 
     };
 
     const styles = {
@@ -81,7 +81,7 @@ const NavigationBar = () => {
             gap: '15px',
         },
         rightAligned: {
-            marginLeft: 'auto', // Сдвигает элементы вправо
+            marginLeft: 'auto', 
             display: 'flex',
             alignItems: 'center',
             gap: '10px',

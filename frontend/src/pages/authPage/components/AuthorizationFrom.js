@@ -25,19 +25,18 @@ const AuthorizationForm = ({ login }) => {
     };
 
     const onLogin = async () => {
-        // Валидация email
         if (!validateEmail(email)) {
             setError('Please enter a valid email address.');
             return;
         }
 
-        // Валидация пароля
+ 
         if (password.length < 8) {
             setError('Password must be at least 8 characters long.');
             return;
         }
 
-        setError(''); // Сброс ошибки
+        setError(''); 
         console.log(email + ' ' + password);
         await login(email, password);
         setEmail('');

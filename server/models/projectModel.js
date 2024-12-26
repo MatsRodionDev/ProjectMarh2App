@@ -36,7 +36,7 @@ const Project = sequelize.define('Projects', {
     customerId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'Customers', // Имя таблицы
+            model: 'Customers', 
             key: 'id'
         },
         allowNull: false

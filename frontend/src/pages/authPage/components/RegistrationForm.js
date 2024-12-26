@@ -34,7 +34,6 @@ const RegistrationForm = ({ register }) => {
     };
 
     const onRegister = async () => {
-        // Валидация полей
         if (!firstName || !lastName || !email || !password) {
             setError('Please fill in all fields.');
             return;
@@ -50,10 +49,9 @@ const RegistrationForm = ({ register }) => {
             return;
         }
 
-        setError(''); // Сброс ошибки
+        setError(''); 
         await register(firstName, lastName, email, password);
 
-        // Сброс полей формы
         setFirstName('');
         setLastName('');
         setEmail('');

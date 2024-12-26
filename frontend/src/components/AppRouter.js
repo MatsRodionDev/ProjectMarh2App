@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AppRouter = () => {
     const role = useSelector((state) => state.role.role);
-    const loading = useSelector((state) => state.role.loading); // Получаем состояние загрузки
+    const loading = useSelector((state) => state.role.loading); 
     const navigate = useNavigate();
 
     useEffect(() => {

@@ -92,7 +92,7 @@ const Projects = () => {
         <div>
             <Container 
                 className="d-flex flex-column align-items-center pt-3 pb-3"
-                style={{ maxWidth: '100%', padding: '0 15px' }} // Адаптивная ширина
+                style={{ maxWidth: '100%', padding: '0 15px' }} 
             >
                 <SortingMenu
                     isFinished={isFinished}
